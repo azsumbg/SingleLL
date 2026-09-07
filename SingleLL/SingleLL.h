@@ -25,16 +25,14 @@ namespace sll
 
 		LIST() 
 		{
-			mPtr = new NODE<T>{};
+			mPtr = nullptr;
 		};
 		LIST(T data)
 		{
 			mPtr = new NODE<T>{};
-			
-			NODE<T>* next_final_node = new NODE<T>{};
 
 			mPtr->data = data;
-			mPtr->next_node = next_final_node;
+			mPtr->next_node = nullptr;
 
 			++mSize;
 		}
@@ -110,13 +108,12 @@ namespace sll
 
 		void push_back(T what)
 		{
-			if (mPtr->next_node == nullptr)
+		
+			if (mPtr == nullptr)
 			{
-				mPtr->data = what;
-
 				NODE<T>* new_node = new NODE<T>{};
-
-				mPtr->next_node = new_node;
+				new_node->data = what;
+				mPtr = new_node;
 			}
 			else
 			{
@@ -135,7 +132,7 @@ namespace sll
 		}
 		void push_front(T what)
 		{
-			if (mPtr->next_node == nullptr)
+			if (mPtr == nullptr)
 			{
 				NODE<T>* new_node = new NODE<T>{};
 
@@ -158,9 +155,10 @@ namespace sll
 
 		bool insert(T what, size_t pos)
 		{
-			if (pos > mSize)return false;
+			if (pos > mSize || mPtr == nullptr)return false;
 
 			NODE<T>* find_pos = mPtr;
+			NODE<T>* prev_node = nullptr;
 			NODE<T>* new_node = new NODE<T>{};
 
 			if (pos == 0)
@@ -172,12 +170,16 @@ namespace sll
 			}
 			else
 			{
-				for (size_t i = 0; i < pos; ++i)find_pos = find_pos->next_node;
+				for (size_t i = 0; i < pos; ++i)
+				{
+					if (i == pos - 1)prev_node = find_pos;
+					find_pos = find_pos->next_node;
+				}
 
 				new_node->data = what;
-				new_node->next_node = find_pos->next_node;
+				new_node->next_node = find_pos;
 
-				find_pos->next_node = new_node;
+				prev_node->next_node = new_node;
 			}
 
 			++mSize;
