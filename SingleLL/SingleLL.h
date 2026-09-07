@@ -10,7 +10,7 @@ namespace sll
 {
 	template<typename T>struct NODE
 	{
-		NODE* next_node{ nullptr };
+		NODE<T>* next_node{ nullptr };
 
 		T data{};
 	};
@@ -31,12 +31,12 @@ namespace sll
 		{
 			mPtr = new NODE<T>{};
 			
-			NODE* next_final_node = new NODE<T>{};
+			NODE<T>* next_final_node = new NODE<T>{};
 
 			mPtr->data = data;
 			mPtr->next_node = next_final_node;
 
-			++size;
+			++mSize;
 		}
 		~LIST()
 		{
@@ -48,7 +48,7 @@ namespace sll
 				while (next != nullptr)
 				{
 					NODE<T>* current = next;
-					next = current->next;
+					next = current->next_node;
 					delete current;
 				}
 			}
@@ -84,17 +84,28 @@ namespace sll
 			mSize = 0;
 		}
 
-		NODE<T>& front()
+		T& front()
 		{
-			return *mPtr;
+			return mPtr->data;
 		}
-		NODE<T>& back()
+		T& back()
 		{
-			NODE<T>* current = mPtr;
+			NODE<T>* traverser = mPtr;
 
-			while (current->next_node != nullptr)current = current->next_node;
+			while (traverser->next_node != nullptr)traverser = traverser->next_node;
 			
-			return *current;
+			return traverser->data;
+		}
+
+		T& operator[](size_t pos)
+		{
+			if (pos >= mSize)return back();
+
+			NODE<T>* temp = mPtr;
+
+			for (size_t i = 0; i < pos; ++i)temp = temp->next_node;
+
+			return temp->data;
 		}
 
 		void push_back(T what)
@@ -103,13 +114,13 @@ namespace sll
 			{
 				mPtr->data = what;
 
-				NODE<T>* new_node = new NODE{};
+				NODE<T>* new_node = new NODE<T>{};
 
 				mPtr->next_node = new_node;
 			}
 			else
 			{
-				NODE<T>* find_pos = mPtr->next_node;
+				NODE<T>* find_pos = mPtr;
 				NODE<T>* new_node = new NODE<T>{};
 
 				new_node->data = what;
@@ -134,7 +145,7 @@ namespace sll
 			else
 			{
 				NODE<T>* old_first_node = mPtr;
-				NODE<T>* new_first_node = new NODE{};
+				NODE<T>* new_first_node = new NODE<T>{};
 
 				new_first_node->data = what;
 				new_first_node->next_node = old_first_node;
@@ -150,19 +161,55 @@ namespace sll
 			if (pos > mSize)return false;
 
 			NODE<T>* find_pos = mPtr;
-			NODE<T>* new_node = new NODE{};
+			NODE<T>* new_node = new NODE<T>{};
 
-			for (size_t i = 0; i < pos; ++i)find_pos = find_pos->next_node;
+			if (pos == 0)
+			{
+				new_node->next_node = mPtr;
+				new_node->data = what;
 
-			new_node->data = what;
-			new_node->next_node = find_pos->next_node;
+				mPtr = new_node;
+			}
+			else
+			{
+				for (size_t i = 0; i < pos; ++i)find_pos = find_pos->next_node;
 
-			find_pos->next_node = new_node;
+				new_node->data = what;
+				new_node->next_node = find_pos->next_node;
+
+				find_pos->next_node = new_node;
+			}
 
 			++mSize;
 
 			return true;
 		}
+		bool erase(size_t pos)
+		{
+			if (pos > mSize)return false;
 
+			NODE<T>* temp = mPtr;
+			NODE<T>* old = nullptr;
+
+			if (pos == 0)
+			{
+				mPtr = mPtr->next_node;
+				delete temp;
+			}
+			else
+			{
+				for (size_t i = 0; i < pos; ++i)
+				{
+					if (i == pos - 1)old = temp;
+					temp = temp->next_node;
+				}
+								
+				old->next_node = temp->next_node;
+				delete temp;
+			}
+
+			--mSize;
+			return true;
+		}
 	};
 }

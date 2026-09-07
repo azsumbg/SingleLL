@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="SingleLL/SingleLL.vcxproj" />
+  <Project Path="SingleLL/SingleLL.vcxproj" Id="a8dfa8eb-a4b4-4054-9a9d-1b352dcde0e2" />
 </Solution>
