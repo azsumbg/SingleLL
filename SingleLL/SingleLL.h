@@ -52,6 +52,42 @@ namespace sll
 			}
 		}
 		
+		LIST<T>& operator = (LIST<T>& other)
+		{
+			if (other.mPtr == nullptr || mPtr == other.mPtr)
+			{
+				delete mPtr;
+				mPtr = new NODE<T>;
+			}
+			else
+			{
+				mSize = other.mSize;
+
+				NODE<T>* copy_from{ other.mPtr };
+				
+				NODE<T>* first_node = new NODE<T>;
+				first_node->data = copy_from->data;
+				mPtr = first_node;
+
+				NODE<T>* current{ mPtr };
+
+				while (copy_from->next_node != nullptr)
+				{
+					NODE<T>* temp = new NODE<T*>;
+
+					temp->data = copy_from->data;
+					
+					current->next_node = temp;
+
+					current = current->next_node;
+
+					copy_from = copy_from->next_node;
+				}
+			}
+
+			return *this;
+		}
+
 		size_t size()const
 		{
 			return mSize;
@@ -72,7 +108,7 @@ namespace sll
 				while (next != nullptr)
 				{
 					NODE<T>* current = next;
-					next = current->next;
+					next = current->next_node;
 					delete current;
 				}
 			}
