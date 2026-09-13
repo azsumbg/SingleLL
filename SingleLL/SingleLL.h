@@ -6,6 +6,10 @@
 #define SINGLELL_API __declspec(dllimport)
 #endif 
 
+#include <cstdlib>
+#include <d2d1.h>
+#pragma comment(lib, "d2d1.lib")
+
 namespace sll
 {
 	template<typename T>struct NODE
@@ -338,4 +342,9 @@ namespace sll
 			return true;
 		}
 	};
+
+	float SINGLELL_API Distance(D2D1_POINT_2F first, D2D1_POINT_2F second);
+
+	void SINGLELL_API Sort(LIST<D2D1_POINT_2F>& SortList, D2D1_POINT_2F ref, bool ascending = true);
+	void SINGLELL_API Sort(LIST<D2D1_RECT_F>& SortList, D2D1_RECT_F ref, bool ascending = true);
 }
