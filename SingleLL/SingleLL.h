@@ -56,8 +56,20 @@ namespace sll
 		{
 			if (other.mPtr == nullptr || mPtr == other.mPtr)
 			{
-				delete mPtr;
-				mPtr = new NODE<T>;
+				if (mPtr)
+				{
+					NODE<T>* current{ mPtr };
+					NODE<T>* next{ nullptr };
+
+					while (next != nullptr)
+					{
+						next = current->next_node;
+						delete current;
+					}
+				}
+				
+				mPtr = nullptr;
+				mSize = 0;
 			}
 			else
 			{
@@ -73,16 +85,46 @@ namespace sll
 
 				while (copy_from->next_node != nullptr)
 				{
-					NODE<T>* temp = new NODE<T*>;
+					copy_from = copy_from->next_node;
+
+					NODE<T>* temp = new NODE<T>;
 
 					temp->data = copy_from->data;
 					
 					current->next_node = temp;
 
 					current = current->next_node;
-
-					copy_from = copy_from->next_node;
 				}
+			}
+
+			return *this;
+		}
+
+		LIST<T>& operator =(LIST<T>&& other)
+		{
+			if (other.mPtr == nullptr || mPtr == other.mPtr)
+			{
+				if (mPtr)
+				{
+					NODE<T>* current{ mPtr };
+					NODE<T>* next{ nullptr };
+
+					while (next != nullptr)
+					{
+						next = current->next_node;
+						delete current;
+					}
+				}
+
+				mPtr = nullptr;
+				mSize = 0;
+			}
+			else
+			{
+				mSize = other.mSize;
+				mPtr = other.mPtr;
+
+				other.mPtr = nullptr;
 			}
 
 			return *this;
