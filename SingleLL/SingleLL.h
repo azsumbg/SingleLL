@@ -36,6 +36,52 @@ namespace sll
 
 			++mSize;
 		}
+		LIST(LIST& other)
+		{
+			if (other.mPtr == nullptr)
+			{
+				mPtr = nullptr;
+				mSize = 0;
+			}
+			else
+			{
+				mSize = other.mSize;
+
+				NODE<T>* from{ other.mPtr };
+				NODE<T>* to{ mPtr };
+
+				NODE<T> first_node{ new NODE<T> };
+				first_node.data = from->data;
+
+				to = first_node;
+
+				while (from->next_node != nullptr)
+				{
+					from = from->next_node;
+
+					NODE<T>* temp{ new NODE<T> };
+
+					temp->data = from->data;
+					to->next_node = temp; 
+
+					to = to->next_node;
+				}
+			}
+		}
+		LIST(LIST&& other)
+		{
+			if (other.mPtr == nullptr)
+			{
+				mPtr = nullptr;
+				mSize = 0;
+			}
+			else
+			{
+				mSize = other.mSize;
+				mPtr = other.mPtr;
+				other.mPtr = nullptr;
+			}
+		}
 		~LIST()
 		{
 			if (mSize == 1)delete mPtr;
@@ -100,7 +146,7 @@ namespace sll
 			return *this;
 		}
 
-		LIST<T>& operator =(LIST<T>&& other)
+		LIST<T>& operator = (LIST<T>&& other)
 		{
 			if (other.mPtr == nullptr || mPtr == other.mPtr)
 			{
