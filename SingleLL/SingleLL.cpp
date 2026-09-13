@@ -9,7 +9,7 @@ float sll::Distance(D2D1_POINT_2F first, D2D1_POINT_2F second)
 	return (float)(sqrt(a + b));
 }
 
-void sll::Sort(LIST<D2D1_POINT_2F>& SortList, D2D1_POINT_2F ref, bool ascending = true)
+void sll::Sort(LIST<D2D1_POINT_2F>& SortList, D2D1_POINT_2F ref, bool ascending)
 {
 	if (ascending)
 	{
@@ -60,7 +60,7 @@ void sll::Sort(LIST<D2D1_POINT_2F>& SortList, D2D1_POINT_2F ref, bool ascending 
 		}
 	}
 }
-void sll::Sort(LIST<D2D1_RECT_F>& SortList, D2D1_RECT_F ref, bool ascending = true)
+void sll::Sort(LIST<D2D1_RECT_F>& SortList, D2D1_RECT_F ref, bool ascending)
 {
 	D2D1_POINT_2F ref_center{ D2D1_POINT_2F(ref.left + (ref.right - ref.left) / 2.0f,
 		ref.top + (ref.bottom - ref.top) / 2.0f) };
