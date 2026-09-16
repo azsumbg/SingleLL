@@ -56,7 +56,7 @@ namespace sll
 
 			iterator& operator ++ ()
 			{
-				++it_ptr;
+				it_ptr=it_ptr->next_node;
 
 				return *this;
 			}
@@ -71,7 +71,6 @@ namespace sll
 			friend bool operator== (const iterator& a, const iterator& b) { return a.it_ptr == b.it_ptr; };
 			friend bool operator!= (const iterator& a, const iterator& b) { return a.it_ptr != b.it_ptr; };
 		};
-		
 		
 		LIST() 
 		{
@@ -269,13 +268,13 @@ namespace sll
 			return traverser->data;
 		}
 
-		NODE<T>* begin()
+		iterator begin()
 		{
 			return iterator(mPtr);
 		}
-		NODE<T>* end()
+		iterator end()
 		{
-			NODE* temp(mPtr);
+			NODE<T>* temp(mPtr);
 
 			while (temp != nullptr)temp = temp->next_node;
 
