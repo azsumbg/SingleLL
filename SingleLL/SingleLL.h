@@ -45,19 +45,6 @@ namespace sll
 
 			iterator(NODE<T>* init_ptr) :it_ptr{ init_ptr } {};
 
-			NODE<T>* begin()
-			{
-				return iterator(mPtr);
-			}
-			NODE<T>* end()
-			{
-				NODE* temp(mPtr);
-
-				while (temp != nullptr)temp = temp->next_node;
-
-				return iterator(temp->next_node);
-			}
-
 			NODE<T>& operator * ()
 			{
 				return *it_ptr;
@@ -280,6 +267,19 @@ namespace sll
 			while (traverser->next_node != nullptr)traverser = traverser->next_node;
 			
 			return traverser->data;
+		}
+
+		NODE<T>* begin()
+		{
+			return iterator(mPtr);
+		}
+		NODE<T>* end()
+		{
+			NODE* temp(mPtr);
+
+			while (temp != nullptr)temp = temp->next_node;
+
+			return iterator(temp->next_node);
 		}
 
 		T& operator[](size_t pos)
