@@ -274,11 +274,7 @@ namespace sll
 		}
 		iterator end()
 		{
-			NODE<T>* temp(mPtr);
-
-			while (temp != nullptr)temp = temp->next_node;
-
-			return iterator(temp->next_node);
+			return iterator(nullptr);
 		}
 
 		T& operator[](size_t pos)
