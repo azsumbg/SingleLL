@@ -7,6 +7,8 @@
 #endif 
 
 #include <cstdlib>
+#include <iterator>
+
 #include <d2d1.h>
 #pragma comment(lib, "d2d1.lib")
 
@@ -27,6 +29,63 @@ namespace sll
 
 	public:
 
+		class iterator
+		{
+		private:
+			NODE<T>* it_ptr{ nullptr };
+
+		public:
+
+			using iterator_category = std::forward_iterator_tag;
+			using difference_type = ptrdiff_t;
+			using value_type = NODE<T>;
+			using pointer = NODE<T>*;
+			using reference = NODE<T>&;
+
+
+			iterator(NODE<T>* init_ptr) :it_ptr{ init_ptr } {};
+
+			NODE<T>* begin()
+			{
+				return iterator(mPtr);
+			}
+			NODE<T>* end()
+			{
+				NODE* temp(mPtr);
+
+				while (temp != nullptr)temp = temp->next_node;
+
+				return iterator(temp->next_node);
+			}
+
+			NODE<T>& operator * ()
+			{
+				return *it_ptr;
+			}
+			NODE<T>* operator -> ()
+			{
+				return it_ptr;
+			}
+
+			iterator& operator ++ ()
+			{
+				++it_ptr;
+
+				return *this;
+			}
+			iterator operator ++ (int)
+			{
+				iterator temp = *this;
+				++(*this);
+
+				return temp;
+			}
+
+			friend bool operator== (const iterator& a, const iterator& b) { return a.it_ptr == b.it_ptr; };
+			friend bool operator!= (const iterator& a, const iterator& b) { return a.it_ptr != b.it_ptr; };
+		};
+		
+		
 		LIST() 
 		{
 			mPtr = nullptr;
